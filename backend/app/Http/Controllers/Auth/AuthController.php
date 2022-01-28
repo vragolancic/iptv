@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AuthRequest\RegisterRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -23,5 +26,14 @@ class AuthController extends Controller
         return response([
             'error' => 'Invalid Credentials'
         ], Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $user = User::create(
+            $request->only('first_name', 'last_name', 'email') + ['password' => Hash::make($request->input('password'))]
+        );
+
+        return $request;
     }
 }
