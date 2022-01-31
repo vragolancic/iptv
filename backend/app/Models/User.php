@@ -64,9 +64,19 @@ class User extends Authenticatable
         'password'
     ];
 
-    public function role()
+    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function permissions()
+    {
+        return $this->role->permissions->pluck('name');
+    }
+
+    public function hasAccess($access)
+    {
+        return $this->permissions()->contains($access);
     }
 
 }
