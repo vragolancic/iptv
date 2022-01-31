@@ -21,4 +21,9 @@ class Role extends Model
     protected $guarded = ['id'];
 
     public $timestamps = false;
+
+    public function permissions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class, 'role_permission');
+    }
 }
