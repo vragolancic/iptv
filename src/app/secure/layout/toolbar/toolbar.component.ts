@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-toolbar',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolbarComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(public route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+  }
+
+  // Get active path
+  get path() {
+    return this.route.snapshot.firstChild.routeConfig.path;
   }
 
 }

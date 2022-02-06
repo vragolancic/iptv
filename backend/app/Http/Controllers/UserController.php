@@ -19,7 +19,7 @@ class UserController extends Controller
 
         \Gate::authorize('view', 'users');
 
-        $users = User::paginate();
+        $users = User::paginate(6);
 
         return UserResource::collection($users);
     }

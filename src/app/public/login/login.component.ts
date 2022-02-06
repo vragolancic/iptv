@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
+import {errorMessagesResponse} from "../../helper/errors/errormessagesresponse";
+import {HttpErrorResponse} from "@angular/common/http";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -10,7 +13,7 @@ import {AuthService} from "../../services/auth.service";
 export class LoginComponent implements OnInit {
 
   form: FormGroup;
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -21,8 +24,13 @@ export class LoginComponent implements OnInit {
 
   submit(){
       this.authService.login(this.form.getRawValue()).subscribe({
-        next: (res) => {console.log(res)},
-        error: (error) => {console.log(error)},
+        next: (res: any) => {
+          localStorage.setItem('token', res.token);
+          this.router.navigate(['/dashboard']);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(errorMessagesResponse(error));
+        },
       });
   }
 
